@@ -1,24 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { createContext, useReducer } from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Container, Typography } from "@mui/material";
+import PostPage from "./components/PostPage";
+import Home from "./components/Home";
+import NavBar from "./components/NavBar";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import AddPost from "./components/AddPost";
+import reducer, { initialState } from "./reducer/UseReducer";
+import Logout from "./components/Logout";
+
+export const UserContext = createContext();
 
 function App() {
+  const [state, dispatch] = useReducer(reducer, initialState);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <UserContext.Provider value={{ state, dispatch }}>
+        <Router>
+          <NavBar />
+          <Container>
+            <Routes>
+              <Route exact path="/" element={<Home />} />
+              <Route path="/posts/:postId" element={<PostPage />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/logout" element={<Logout/>} />
+              <Route path="/addpost" element={<AddPost />} />
+            </Routes>
+          </Container>
+        </Router>
+      </UserContext.Provider>
+    </>
   );
 }
 
